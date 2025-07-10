@@ -1,0 +1,22 @@
+name: Webhook Event Demo
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [opened, closed]
+
+jobs:
+  notify-webhook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send webhook data to Flask app
+        run: |
+          curl -X POST http://your-local-ip:5000/webhook \
+          -H "Content-Type: application/json" \
+          -H "X-GitHub-Event: push" \
+          -d '{
+                "pusher": {"name": "GitHubUser"},
+                "ref": "refs/heads/main"
+              }'
